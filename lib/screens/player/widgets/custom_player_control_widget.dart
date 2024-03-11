@@ -129,7 +129,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                       vertical: 10,
                                     ),
                                     backgroundColor: const Color(0xff525252),
-                                    bufferedColor: const Color(0xff525252),
+                                    bufferedColor: Colors.red,
                                     getPlayedPaint: (
                                         {double? handleRadius,
                                         double? height,
@@ -197,7 +197,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                   InkWell(
                                     onTap: playerCtr.currentVedioIndex != 0
                                         ? () {
-                                            playerCtr.flickManager
+                                            playerCtr.flickManager!
                                                 .handleChangeVideo(
                                                     VideoPlayerController
                                                         .networkUrl(
@@ -225,7 +225,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                             playerCtr
                                                 .driveUploadedVediosList.length
                                         ? () {
-                                            playerCtr.flickManager
+                                            playerCtr.flickManager!
                                                 .handleChangeVideo(
                                                     VideoPlayerController
                                                         .networkUrl(

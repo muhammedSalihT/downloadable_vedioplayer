@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:dio/dio.dart';
 import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_text_widget.dart';
@@ -29,7 +29,6 @@ class PlayerProvider extends ChangeNotifier {
   void initializeVideo() async {
     final internalStoragePath = await getDownloadPath();
     if (await File('$internalStoragePath/$currentVedioIndex.mp4').exists()) {
-      log('true');
       flickManager = FlickManager(
         videoPlayerController: VideoPlayerController.file(
           File('$internalStoragePath/$currentVedioIndex.mp4'),
@@ -58,15 +57,13 @@ class PlayerProvider extends ChangeNotifier {
           options: Options(responseType: ResponseType.bytes),
         );
         final videoBytes = response.data;
+        final encryptedData = crypto.Digest(videoBytes);
 
-        // final key = utf8.encode('myEncryptionKey');
-
-        // final encryptedVideoBytes = sha1.convert(key);
         final internalStoragePath = await getDownloadPath();
         log(internalStoragePath.toString());
 
         final file = File('$internalStoragePath/$currentVedioIndex.mp4');
-        await file.writeAsBytes(videoBytes);
+        await file.writeAsBytes(encryptedData.bytes);
       } else {
         getPermission().then((value) async {
           final storageStatus = await getStorageStatus();
@@ -85,7 +82,7 @@ class PlayerProvider extends ChangeNotifier {
                     ),
                     contentPadding: const EdgeInsets.fromLTRB(24, 10, 20, 20),
                     content: const RefractedTextWidget(
-                      text: "will use your storage to download vedio",
+                      text: "Will use your storage to download vedio",
                       textSize: 13,
                       maxLines: 3,
                     ),
@@ -156,29 +153,29 @@ class PlayerProvider extends ChangeNotifier {
     }
     return null;
   }
+}
 
-  Future<PermissionStatus> getStorageStatus() async {
-    if (Platform.isAndroid) {
-      return await Permission.mediaLibrary.status;
-    } else {
-      return await Permission.storage.status;
-    }
+Future<PermissionStatus> getStorageStatus() async {
+  if (Platform.isAndroid) {
+    return await Permission.mediaLibrary.status;
+  } else {
+    return await Permission.storage.status;
   }
+}
 
-  Future<void> getPermission() async {
-    print("getPermission");
+Future<void> getPermission() async {
+  print("getPermission");
 
-    if (Platform.isAndroid) {
-      log('message');
-      await Permission.mediaLibrary.request();
-    } else {
-      await Permission.storage.request();
-    }
+  if (Platform.isAndroid) {
+    log('message');
+    await Permission.mediaLibrary.request();
+  } else {
+    await Permission.storage.request();
   }
+}
 
-  void goToAppSettings() async {
-    await OpenAppsSettings.openAppsSettings(
-      settingsCode: SettingsCode.APP_SETTINGS,
-    );
-  }
+void goToAppSettings() async {
+  await OpenAppsSettings.openAppsSettings(
+    settingsCode: SettingsCode.APP_SETTINGS,
+  );
 }
