@@ -1,5 +1,6 @@
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
 import 'package:downloadeble_videoplayer/screens/player/widgets/custom_player_control_widget.dart';
+import 'package:downloadeble_videoplayer/utils/refracted_util_widgets.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_svg_widget.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_text_widget.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -50,19 +51,33 @@ class _PlayerViewState extends State<PlayerView> {
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: index == 1
-                          ? Row(
-                              children: [
-                                const RefractedSvgWidgte(
-                                  svgPath: 'assets/images/Vector 3.svg',
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 10.w),
-                                  child: const RefractedTextWidget(
-                                    text: 'Download',
-                                    textWeight: FontWeight.w400,
-                                  ),
-                                )
-                              ],
+                          ? InkWell(
+                              onTap: playerPro.isVedioDownloading
+                                  ? null
+                                  : () {
+                                      playerPro.downloadAndEncryptVideo(
+                                          vedioUrl:
+                                              playerPro.driveUploadedVediosList[
+                                                  playerPro.currentVedioIndex]);
+                                    },
+                              child: Row(
+                                children: [
+                                  playerPro.isVedioDownloading
+                                      ? UtilWidgets.refractedLoadingWidget()
+                                      : const RefractedSvgWidgte(
+                                          svgPath: 'assets/images/Vector 3.svg',
+                                        ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 10.w),
+                                    child: RefractedTextWidget(
+                                      text: playerPro.isVedioDownloading
+                                          ? 'Downloading..'
+                                          : 'Download',
+                                      textWeight: FontWeight.w400,
+                                    ),
+                                  )
+                                ],
+                              ),
                             )
                           : Icon(
                               index == 0

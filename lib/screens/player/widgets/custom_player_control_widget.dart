@@ -4,9 +4,9 @@ import 'package:downloadeble_videoplayer/widgets/refracted_svg_widget.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_text_widget.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
 class CustomPlayerControlWidget extends StatelessWidget {
   const CustomPlayerControlWidget(
@@ -195,22 +195,56 @@ class CustomPlayerControlWidget extends StatelessWidget {
                               Row(
                                 children: [
                                   InkWell(
-                                    onTap: () {
-                                      playerCtr.flickManager.handleChangeVideo(
-                                          videoManager.videoPlayerController!);
-                                    },
+                                    onTap: playerCtr.currentVedioIndex != 0
+                                        ? () {
+                                            playerCtr.flickManager
+                                                .handleChangeVideo(
+                                                    VideoPlayerController
+                                                        .networkUrl(
+                                              Uri.parse(playerCtr
+                                                      .driveUploadedVediosList[
+                                                  playerCtr
+                                                      .currentVedioIndex--]),
+                                            ));
+                                          }
+                                        : null,
                                     child: RefractedSvgWidgte(
                                       svgPath:
                                           'assets/images/previous_icon.svg',
                                       svgHeight: 13.h,
+                                      color: playerCtr.currentVedioIndex != 0
+                                          ? null
+                                          : Colors.grey,
                                     ),
                                   ),
                                   SizedBox(
                                     width: 30.w,
                                   ),
-                                  RefractedSvgWidgte(
-                                    svgPath: 'assets/images/next_icon.svg',
-                                    svgHeight: 13.h,
+                                  InkWell(
+                                    onTap: playerCtr.currentVedioIndex <
+                                            playerCtr
+                                                .driveUploadedVediosList.length
+                                        ? () {
+                                            playerCtr.flickManager
+                                                .handleChangeVideo(
+                                                    VideoPlayerController
+                                                        .networkUrl(
+                                              Uri.parse(playerCtr
+                                                      .driveUploadedVediosList[
+                                                  playerCtr
+                                                      .currentVedioIndex++]),
+                                            ));
+                                          }
+                                        : null,
+                                    child: RefractedSvgWidgte(
+                                      svgPath: 'assets/images/next_icon.svg',
+                                      svgHeight: 13.h,
+                                      color: playerCtr.currentVedioIndex <
+                                              playerCtr.driveUploadedVediosList
+                                                  .length
+                                          ? null
+                                          : Colors.grey,
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 30.w,
@@ -270,23 +304,6 @@ class CustomPlayerControlWidget extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-        Positioned(
-          right: 20,
-          top: 10,
-          child: GestureDetector(
-            onTap: () {
-              SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                  overlays: SystemUiOverlay.values);
-              SystemChrome.setPreferredOrientations(
-                  [DeviceOrientation.portraitUp]);
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.cancel,
-              size: 30,
-            ),
           ),
         ),
       ],
