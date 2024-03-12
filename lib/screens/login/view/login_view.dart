@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:downloadeble_videoplayer/constents/app_colors.dart';
 import 'package:downloadeble_videoplayer/screens/otp/view/otp_view.dart';
 import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
+import 'package:downloadeble_videoplayer/utils/refracted_util_widgets.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_button_widget.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_text_widget.dart';
 import 'package:downloadeble_videoplayer/widgets/reracted_textformfield_widget.dart';
@@ -78,6 +79,7 @@ class LoginView extends StatelessWidget {
                       radius: 10.r,
                       isEditting: false,
                       onPressed: () {
+                        UtilWidgets.launch();
                         AppNavigation.push(
                           context: context,
                           newRoute: AppNavigation.createCustomRoute(

@@ -79,11 +79,42 @@ class _PlayerViewState extends State<PlayerView> {
                                 ],
                               ),
                             )
-                          : Icon(
-                              index == 0
-                                  ? Icons.arrow_back_ios_new_rounded
-                                  : Icons.arrow_forward_ios_rounded,
-                              size: 30.sp,
+                          : InkWell(
+                              onTap: () {
+                                if (index == 0 &&
+                                    playerPro.currentVedioIndex != 0) {
+                                  playerPro.handleNextOrPrev(
+                                      vedioIndex:
+                                          playerPro.currentVedioIndex - 1);
+                                }
+
+                                if (index == 2 &&
+                                    playerPro.currentVedioIndex <
+                                        playerPro.driveUploadedVediosList
+                                                .length -
+                                            1) {
+                                  playerPro.handleNextOrPrev(
+                                      vedioIndex:
+                                          playerPro.currentVedioIndex + 1);
+                                }
+                              },
+                              child: Icon(
+                                index == 0
+                                    ? Icons.arrow_back_ios_new_rounded
+                                    : Icons.arrow_forward_ios_rounded,
+                                size: 30.sp,
+                                color: index == 0 &&
+                                        playerPro.currentVedioIndex == 0
+                                    ? Colors.grey
+                                    : index == 2 &&
+                                            playerPro.currentVedioIndex ==
+                                                playerPro
+                                                        .driveUploadedVediosList
+                                                        .length -
+                                                    1
+                                        ? Colors.grey
+                                        : null,
+                              ),
                             ),
                     ),
                   ),

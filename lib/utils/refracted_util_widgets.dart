@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/developer.dart';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:downloadeble_videoplayer/constents/app_colors.dart';
@@ -5,6 +7,7 @@ import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/refracted_text_widget.dart';
 
 class UtilWidgets {
@@ -71,8 +74,8 @@ class UtilWidgets {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
-                    child: Column(
-                      children: const [
+                    child: const Column(
+                      children: [
                         RefractedTextWidget(
                           text: 'Your order has ben placed',
                           textSize: 18,
@@ -180,5 +183,19 @@ class UtilWidgets {
         )),
       ),
     );
+  }
+
+  static Future<void> launch() async {
+    try {
+      final Uri smsUri = Uri(
+        scheme: 'sms',
+        path: '919656302654',
+        query: 'body=${Uri.encodeComponent('9656')}',
+      );
+
+      await launchUrl(smsUri);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

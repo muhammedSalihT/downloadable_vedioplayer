@@ -59,6 +59,37 @@ class CustomPlayerControlWidget extends StatelessWidget {
             : playWidget;
     return Stack(
       children: <Widget>[
+        FlickAutoHideChild(
+            child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+          decoration: const BoxDecoration(boxShadow: [
+            BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.1),
+                blurRadius: 10,
+                spreadRadius: 10)
+          ]),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const RefractedSvgWidgte(
+                    svgPath: 'assets/images/Group 1.svg',
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.r),
+                    child: Image.network(
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpFuVdBXSr-dNzWMRUya1PocqgluQWwklH0JNStNwwR8J9UxMsje_heF0XqYBlgFuPaeA',
+                      height: 35.h,
+                      width: 35.h,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        )),
         FlickShowControlsAction(
           child: FlickSeekVideoAction(
             child: Center(
@@ -129,7 +160,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                       vertical: 10,
                                     ),
                                     backgroundColor: const Color(0xff525252),
-                                    bufferedColor: Colors.red,
+                                    bufferedColor: const Color(0xff525252),
                                     getPlayedPaint: (
                                         {double? handleRadius,
                                         double? height,
@@ -197,15 +228,10 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                   InkWell(
                                     onTap: playerCtr.currentVedioIndex != 0
                                         ? () {
-                                            playerCtr.flickManager!
-                                                .handleChangeVideo(
-                                                    VideoPlayerController
-                                                        .networkUrl(
-                                              Uri.parse(playerCtr
-                                                      .driveUploadedVediosList[
-                                                  playerCtr
-                                                      .currentVedioIndex--]),
-                                            ));
+                                            playerCtr.handleNextOrPrev(
+                                                vedioIndex: playerCtr
+                                                        .currentVedioIndex -
+                                                    1);
                                           }
                                         : null,
                                     child: RefractedSvgWidgte(
@@ -222,18 +248,14 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: playerCtr.currentVedioIndex <
-                                            playerCtr
-                                                .driveUploadedVediosList.length
+                                            playerCtr.driveUploadedVediosList
+                                                    .length -
+                                                1
                                         ? () {
-                                            playerCtr.flickManager!
-                                                .handleChangeVideo(
-                                                    VideoPlayerController
-                                                        .networkUrl(
-                                              Uri.parse(playerCtr
-                                                      .driveUploadedVediosList[
-                                                  playerCtr
-                                                      .currentVedioIndex++]),
-                                            ));
+                                            playerCtr.handleNextOrPrev(
+                                                vedioIndex: playerCtr
+                                                        .currentVedioIndex +
+                                                    1);
                                           }
                                         : null,
                                     child: RefractedSvgWidgte(
@@ -241,7 +263,8 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                       svgHeight: 13.h,
                                       color: playerCtr.currentVedioIndex <
                                               playerCtr.driveUploadedVediosList
-                                                  .length
+                                                      .length -
+                                                  1
                                           ? null
                                           : Colors.grey,
                                     ),
