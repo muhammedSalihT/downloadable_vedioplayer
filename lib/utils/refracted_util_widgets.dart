@@ -23,8 +23,8 @@ class UtilWidgets {
         height: height ?? 22,
         width: width ?? 22,
         alignment: Alignment.center,
-        child: CircularProgressIndicator(
-          color: color ?? AppColors.appMainColor,
+        child: const CircularProgressIndicator(
+          color: AppColors.appGrey,
         ));
   }
 

@@ -77,7 +77,7 @@ class RefractedButtonWidget extends StatelessWidget {
           height: buttonHeight,
           minWidth: buttonWidth ?? double.infinity,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          onPressed: isEditting ? null : onPressed,
+          onPressed: onPressed,
           child: isEditting
               ? UtilWidgets.refractedLoadingWidget()
               : child ??

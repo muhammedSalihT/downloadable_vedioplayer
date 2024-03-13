@@ -1,9 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:downloadeble_videoplayer/constents/app_colors.dart';
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
 import 'package:downloadeble_videoplayer/screens/player/widgets/custom_player_control_widget.dart';
 import 'package:downloadeble_videoplayer/screens/profile/view/profile_view.dart';
+import 'package:downloadeble_videoplayer/screens/profile/viewmodel/profile_provider.dart';
+import 'package:downloadeble_videoplayer/services/secure_store_service.dart';
 import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:downloadeble_videoplayer/utils/refracted_util_widgets.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_svg_widget.dart';
@@ -24,6 +27,8 @@ class _PlayerViewState extends State<PlayerView> {
   @override
   void initState() {
     final playerPro = Provider.of<PlayerProvider>(context, listen: false);
+    final profilePro = Provider.of<ProfileProvider>(context, listen: false);
+    profilePro.getProfileData();
     playerPro.initializeVideo();
     super.initState();
   }
@@ -58,21 +63,34 @@ class _PlayerViewState extends State<PlayerView> {
                     ),
                   ),
                 ),
-                Positioned(
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpFuVdBXSr-dNzWMRUya1PocqgluQWwklH0JNStNwwR8J9UxMsje_heF0XqYBlgFuPaeA',
-                        height: 35.h,
-                        width: 35.h,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                )
+                Consumer<ProfileProvider>(builder: (context, profilePro, _) {
+                  return Positioned(
+                      right: 0,
+                      child: InkWell(
+                        onTap: () => AppNavigation.push(
+                            context: context,
+                            newRoute: AppNavigation.createCustomRoute(
+                                page: const ProfileView(),
+                                transitionType: TransitionType.slideRight)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: profilePro.fileImage?.path != ''
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  child: Image.file(
+                                    File(profilePro.fileImage?.path ?? ''),
+                                    height: 35.h,
+                                    width: 35.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.account_circle_rounded,
+                                  size: 30.sp,
+                                ),
+                        ),
+                      ));
+                })
               ],
             ),
             Padding(
@@ -200,7 +218,9 @@ class CustomDrawerWidget extends StatelessWidget {
                         playerPro.chnageThemeModel();
                       },
                       themeIcon: Icon(
-                        Icons.light_mode,
+                        playerPro.themeMode == ThemeMode.light
+                            ? Icons.light_mode
+                            : Icons.dark_mode,
                         size: 35.sp,
                       ),
                     ),
@@ -225,7 +245,9 @@ class CustomDrawerWidget extends StatelessWidget {
                     ),
                     child: CustomMenuTileWidget(
                       text: "Logout",
-                      onTap: () {
+                      onTap: () async {
+                        await SecureStoreService.logOutUser();
+                        UtilWidgets.getToast(showText: 'Logout Successfully');
                         // UtilWidgets.refractedOpenDialogBox(
                         //   context: context,
                         //   child: const RefractedLogoutDeleteDialogWidget(

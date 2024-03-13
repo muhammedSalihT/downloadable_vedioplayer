@@ -4,7 +4,9 @@ import 'dart:developer';
 
 import 'package:downloadeble_videoplayer/screens/otp/view/otp_view.dart';
 import 'package:downloadeble_videoplayer/screens/player/view/player_view.dart';
+import 'package:downloadeble_videoplayer/services/secure_store_service.dart';
 import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
+import 'package:downloadeble_videoplayer/utils/refracted_util_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -27,11 +29,11 @@ class FirebaseMobileAuth {
   PhoneVerificationFailed verificationFailed =
       (FirebaseAuthException authException) {
     log('failed');
-    ScaffoldMessenger.of(AppNavigation.navigatorKey.currentState!.context)
-        .showSnackBar(const SnackBar(
-      content: Text(
-          'Phone number verification failed.\nPlease check your number and try again'),
-    ));
+    // ScaffoldMessenger.of(AppNavigation.navigatorKey.currentState!.context)
+    //     .showSnackBar(const SnackBar(
+    //   content: Text(
+    //       'Phone number verification failed.\nPlease check your number and try again'),
+    // ));
   };
 
   PhoneCodeSent codeSent = (verificationId, forceResendingToken) {
@@ -42,10 +44,9 @@ class FirebaseMobileAuth {
         page: const OtpView(),
       ),
     );
-    ScaffoldMessenger.of(AppNavigation.navigatorKey.currentState!.context)
-        .showSnackBar(const SnackBar(
-      content: Text('Please check your phone for the verification code.'),
-    ));
+    UtilWidgets.getToast(
+        showText: 'Please check your phone for the verification code.');
+
     verificationID = verificationId;
     forceResendToken = forceResendingToken!;
   };
@@ -93,17 +94,15 @@ class FirebaseMobileAuth {
 
       final User? user = (await auth.signInWithCredential(credential)).user;
 
-      AppNavigation.push(
+      AppNavigation.pushAndRemoveUntil(
         context: AppNavigation.navigatorKey.currentState!.context,
         newRoute: AppNavigation.createCustomRoute(
           page: const PlayerView(),
         ),
       );
 
-      ScaffoldMessenger.of(AppNavigation.navigatorKey.currentState!.context)
-          .showSnackBar(const SnackBar(
-        content: Text('Login succesfully'),
-      ));
+      await SecureStoreService.saveBearertoken('true');
+      UtilWidgets.getToast(showText: 'Login succesfully');
 
       return true;
     } catch (e) {

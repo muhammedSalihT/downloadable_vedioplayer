@@ -71,7 +71,7 @@ class OtpView extends StatelessWidget {
                 padding: EdgeInsets.only(top: 30.h),
                 child: RefractedButtonWidget(
                   radius: 10.r,
-                  isEditting: false,
+                  isEditting: otpPro.isOtpLogin,
                   onPressed: () {
                     otpPro.onVerifyOtp();
                   },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class OtpProvider extends ChangeNotifier {
   String? enterOtp;
+  bool isOtpLogin = false;
 
   void getEneterOtp({required String value}) {
     enterOtp = value;
@@ -10,8 +11,21 @@ class OtpProvider extends ChangeNotifier {
   }
 
   void onVerifyOtp() async {
-    if (enterOtp != null) {
-      await FirebaseMobileAuth().signInWithPhoneNumber(enterOtp!);
+    try {
+      isOtpLogin = true;
+      notifyListeners();
+      if (enterOtp != null) {
+        await FirebaseMobileAuth()
+            .signInWithPhoneNumber(enterOtp!)
+            .then((value) => isOtpLogin = false);
+        notifyListeners();
+      } else {
+        isOtpLogin = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      isOtpLogin = false;
+      notifyListeners();
     }
   }
 }

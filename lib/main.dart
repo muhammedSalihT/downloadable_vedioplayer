@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:downloadeble_videoplayer/screens/login/view/login_view.dart';
 import 'package:downloadeble_videoplayer/screens/login/viewmodel/login_provider.dart';
 import 'package:downloadeble_videoplayer/screens/otp/viewmodel/otp_provider.dart';
+import 'package:downloadeble_videoplayer/screens/player/view/player_view.dart';
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
 import 'package:downloadeble_videoplayer/screens/profile/viewmodel/profile_provider.dart';
+import 'package:downloadeble_videoplayer/services/secure_store_service.dart';
 import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +21,21 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  dynamic isUserLoggedIn = false;
+  @override
+  void initState() {
+    isUserLoggedIn = SecureStoreService.getBearertoken();
+    log(isUserLoggedIn.toString());
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
@@ -51,7 +68,9 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: const Color(0xffF3F3F3),
               primarySwatch: Colors.blue,
             ),
-            home: const LoginView(),
+            home: isUserLoggedIn == 'true'
+                ? const PlayerView()
+                : const LoginView(),
           );
         });
       }),

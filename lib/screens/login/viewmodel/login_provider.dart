@@ -18,14 +18,18 @@ class LoginProvider extends ChangeNotifier {
     try {
       isLogin = true;
       notifyListeners();
-      await FirebaseMobileAuth().verifyPhoneNumber(
-          phoneNumber: '$currentCntryCode${numberCtr.text}', context: context);
+      await FirebaseMobileAuth()
+          .verifyPhoneNumber(
+              phoneNumber: '$currentCntryCode${numberCtr.text}',
+              context: context)
+          .then(
+            (value) => isLogin = false,
+          );
+      notifyListeners();
     } catch (e) {
       isLogin = false;
       notifyListeners();
       log(e.toString());
     }
-    isLogin = false;
-    notifyListeners();
   }
 }

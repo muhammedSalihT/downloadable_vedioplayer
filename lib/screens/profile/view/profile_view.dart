@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:downloadeble_videoplayer/constents/app_colors.dart';
 import 'package:downloadeble_videoplayer/screens/profile/viewmodel/profile_provider.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_button_widget.dart';
@@ -15,6 +17,13 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  @override
+  void initState() {
+    final profilePro = Provider.of<ProfileProvider>(context, listen: false);
+    profilePro.getProfileData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProfileProvider>(builder: (context, profilePro, _) {
@@ -38,10 +47,11 @@ class _ProfileViewState extends State<ProfileView> {
                       height: 80.h,
                       width: 80.h,
                       decoration: BoxDecoration(
-                          image: profilePro.fileImage != null
+                          image: profilePro.fileImage?.path != ''
                               ? DecorationImage(
                                   fit: BoxFit.fitWidth,
-                                  image: FileImage(profilePro.fileImage!))
+                                  image: FileImage(
+                                      File(profilePro.fileImage?.path ?? '')))
                               : null,
                           shape: BoxShape.circle,
                           color: AppColors.appGrey),
@@ -63,6 +73,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   RefractedTextFormFieldWidget(
                     controller: profilePro.dobCtr,
+                    keyboardtype: TextInputType.number,
                     hinttext: 'DOB',
                     alignLabelWithHint: true,
                   ),
@@ -70,7 +81,7 @@ class _ProfileViewState extends State<ProfileView> {
                     padding: EdgeInsets.only(top: 30.h),
                     child: RefractedButtonWidget(
                       radius: 10.r,
-                      isEditting: false,
+                      isEditting: profilePro.isSaving,
                       onPressed: () async {
                         profilePro.saveUserData();
                       },
