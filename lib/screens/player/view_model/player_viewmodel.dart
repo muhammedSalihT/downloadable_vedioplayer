@@ -34,21 +34,11 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void initializeVideo() async {
-    final internalStoragePath = await getDownloadPath();
-    if (await File('$internalStoragePath/$currentVedioIndex.mp4').exists()) {
-      flickManager = FlickManager(
-        videoPlayerController: VideoPlayerController.file(
-          File('$internalStoragePath/$currentVedioIndex.mp4'),
-        ),
-      );
-    } else {
-      flickManager = FlickManager(
-        videoPlayerController: VideoPlayerController.networkUrl(
-          Uri.parse(driveUploadedVediosList[0]),
-        ),
-      );
-    }
-    notifyListeners();
+    flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.networkUrl(
+        Uri.parse(driveUploadedVediosList[0]),
+      ),
+    );
   }
 
   Future<void> handleNextOrPrev({required int vedioIndex}) async {

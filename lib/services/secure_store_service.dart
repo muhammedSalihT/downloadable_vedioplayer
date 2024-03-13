@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStoreService {
+  static String? isLoggedIn;
   static Future<void> saveBearertoken(String isLogin) async {
     const data = FlutterSecureStorage();
     await data.write(key: "isLoggedin", value: isLogin);
@@ -10,11 +11,11 @@ class SecureStoreService {
     log("isLoggedin $storedToken");
   }
 
-  static getBearertoken() async {
+  static Future<void> getBearertoken() async {
     const data = FlutterSecureStorage();
     String? storedToken = await data.read(key: "isLoggedin");
     log("get isLoggedin  $storedToken");
-    return storedToken;
+    isLoggedIn = storedToken;
   }
 
   static Future<void> logOutUser() async {

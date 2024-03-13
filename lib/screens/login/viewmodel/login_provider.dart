@@ -22,8 +22,8 @@ class LoginProvider extends ChangeNotifier {
           .verifyPhoneNumber(
               phoneNumber: '$currentCntryCode${numberCtr.text}',
               context: context)
-          .then(
-            (value) => isLogin = false,
+          .whenComplete(
+            () => isLogin = false,
           );
       notifyListeners();
     } catch (e) {

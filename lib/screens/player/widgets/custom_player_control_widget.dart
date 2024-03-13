@@ -181,7 +181,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                               FlickCurrentPosition(
                                 fontSize: fontSize,
                               ),
-                              RefractedTextWidget(
+                              const RefractedTextWidget(
                                 text: '/',
                                 textColor: AppColors.appWhite,
                                 textSize: 12,
@@ -210,6 +210,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                       svgPath:
                                           'assets/images/previous_icon.svg',
                                       svgHeight: 13.h,
+                                      svgWidth: 13.w,
                                       color: playerCtr.currentVedioIndex != 0
                                           ? null
                                           : Colors.grey,
@@ -276,6 +277,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                                         svgPath:
                                             'assets/images/settings_icon.svg',
                                         svgHeight: 13.h,
+                                        svgWidth: 13.w,
                                       ),
                                     ),
                                   ),

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:downloadeble_videoplayer/constents/app_colors.dart';
+import 'package:downloadeble_videoplayer/screens/login/view/login_view.dart';
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
 import 'package:downloadeble_videoplayer/screens/player/widgets/custom_player_control_widget.dart';
 import 'package:downloadeble_videoplayer/screens/profile/view/profile_view.dart';
@@ -28,8 +29,9 @@ class _PlayerViewState extends State<PlayerView> {
   void initState() {
     final playerPro = Provider.of<PlayerProvider>(context, listen: false);
     final profilePro = Provider.of<ProfileProvider>(context, listen: false);
-    profilePro.getProfileData();
+
     playerPro.initializeVideo();
+    profilePro.getProfileData();
     super.initState();
   }
 
@@ -87,6 +89,7 @@ class _PlayerViewState extends State<PlayerView> {
                               : Icon(
                                   Icons.account_circle_rounded,
                                   size: 30.sp,
+                                  color: AppColors.appGrey,
                                 ),
                         ),
                       ));
@@ -248,6 +251,10 @@ class CustomDrawerWidget extends StatelessWidget {
                       onTap: () async {
                         await SecureStoreService.logOutUser();
                         UtilWidgets.getToast(showText: 'Logout Successfully');
+                        AppNavigation.pushAndRemoveUntil(
+                            context: context,
+                            materialRoutePage: const LoginView());
+
                         // UtilWidgets.refractedOpenDialogBox(
                         //   context: context,
                         //   child: const RefractedLogoutDeleteDialogWidget(

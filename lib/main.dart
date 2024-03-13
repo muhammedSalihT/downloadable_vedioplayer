@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await SecureStoreService.getBearertoken();
 
   runApp(const MyApp());
 }
@@ -29,14 +30,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  dynamic isUserLoggedIn = false;
-  @override
-  void initState() {
-    isUserLoggedIn = SecureStoreService.getBearertoken();
-    log(isUserLoggedIn.toString());
-    super.initState();
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -68,7 +61,7 @@ class _MyAppState extends State<MyApp> {
               scaffoldBackgroundColor: const Color(0xffF3F3F3),
               primarySwatch: Colors.blue,
             ),
-            home: isUserLoggedIn == 'true'
+            home: SecureStoreService.isLoggedIn == 'true'
                 ? const PlayerView()
                 : const LoginView(),
           );
