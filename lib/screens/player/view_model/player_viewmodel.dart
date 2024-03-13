@@ -17,6 +17,7 @@ class PlayerProvider extends ChangeNotifier {
   int currentVedioIndex = 0;
   bool isVedioDownloading = false;
   int count = 0;
+  ThemeMode themeMode = ThemeMode.light;
 
   List<String> driveUploadedVediosList = [
     'https://drive.google.com/uc?id=1COsT44G70i0a7XtzumUQ9Xe-hrCnHlJu&export=download',
@@ -25,6 +26,12 @@ class PlayerProvider extends ChangeNotifier {
     'https://drive.google.com/uc?id=15uhz-jrPDCXcA3P9TGtC77XL2j_sIhn2&export=download',
     'https://drive.google.com/uc?id=1aDc7bWTsTURrSb_KTdgcqPig5uf3JCK0&export=download',
   ];
+
+  chnageThemeModel() {
+    themeMode = themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+    log(themeMode.toString());
+  }
 
   void initializeVideo() async {
     final internalStoragePath = await getDownloadPath();

@@ -43,7 +43,7 @@ class RefractedTextWidget extends StatelessWidget {
           style: TextStyle(
               fontFamily: fontFamily,
               decoration: decoration,
-              color: textColor ?? Colors.black,
+              color: textColor,
               // ignore: prefer_if_null_operators
               fontSize: textSize != null
                   ? textSize?.sp

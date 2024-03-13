@@ -3,6 +3,7 @@ import 'package:downloadeble_videoplayer/screens/login/view/login_view.dart';
 import 'package:downloadeble_videoplayer/screens/login/viewmodel/login_provider.dart';
 import 'package:downloadeble_videoplayer/screens/otp/viewmodel/otp_provider.dart';
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
+import 'package:downloadeble_videoplayer/screens/profile/viewmodel/profile_provider.dart';
 import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,19 +34,26 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => OtpProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileProvider(),
+        ),
       ],
       child: ScreenUtilInit(builder: (context, _) {
-        return MaterialApp(
-          navigatorKey: AppNavigation.navigatorKey,
-          debugShowCheckedModeBanner: false,
-          builder: BotToastInit(),
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            scaffoldBackgroundColor: const Color(0xffF3F3F3),
-            primarySwatch: Colors.blue,
-          ),
-          home: const LoginView(),
-        );
+        return Consumer<PlayerProvider>(builder: (context, playerPro, _) {
+          return MaterialApp(
+            darkTheme: ThemeData.dark(),
+            themeMode: playerPro.themeMode,
+            navigatorKey: AppNavigation.navigatorKey,
+            debugShowCheckedModeBanner: false,
+            builder: BotToastInit(),
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              scaffoldBackgroundColor: const Color(0xffF3F3F3),
+              primarySwatch: Colors.blue,
+            ),
+            home: const LoginView(),
+          );
+        });
       }),
     );
   }

@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:downloadeble_videoplayer/constents/app_colors.dart';
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
 import 'package:downloadeble_videoplayer/screens/player/widgets/custom_player_control_widget.dart';
+import 'package:downloadeble_videoplayer/screens/profile/view/profile_view.dart';
+import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:downloadeble_videoplayer/utils/refracted_util_widgets.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_svg_widget.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_text_widget.dart';
@@ -27,15 +32,48 @@ class _PlayerViewState extends State<PlayerView> {
   Widget build(BuildContext context) {
     return Consumer<PlayerProvider>(builder: (context, playerPro, _) {
       return Scaffold(
+        key: AppNavigation.drawerKey,
+        drawer: const CustomDrawerWidget(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FlickVideoPlayer(
-              flickManager: playerPro.flickManager,
-              systemUIOverlay: const [],
-              flickVideoWithControls: const FlickVideoWithControls(
-                controls: CustomPlayerControlWidget(),
-              ),
+            Stack(
+              children: [
+                FlickVideoPlayer(
+                  flickManager: playerPro.flickManager,
+                  systemUIOverlay: const [],
+                  flickVideoWithControls: const FlickVideoWithControls(
+                    controls: CustomPlayerControlWidget(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: GestureDetector(
+                    onTap: () {
+                      log('message');
+                      AppNavigation.drawerKey.currentState?.openDrawer();
+                    },
+                    child: const RefractedSvgWidgte(
+                      svgPath: 'assets/images/Group 1.svg',
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Image.network(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpFuVdBXSr-dNzWMRUya1PocqgluQWwklH0JNStNwwR8J9UxMsje_heF0XqYBlgFuPaeA',
+                        height: 35.h,
+                        width: 35.h,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
@@ -45,9 +83,10 @@ class _PlayerViewState extends State<PlayerView> {
                   3,
                   (index) => Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: Colors.white,
-                    ),
+                        borderRadius: BorderRadius.circular(10.r),
+                        color: playerPro.themeMode == ThemeMode.light
+                            ? AppColors.appWhite
+                            : AppColors.appBlack),
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: index == 1
@@ -113,7 +152,9 @@ class _PlayerViewState extends State<PlayerView> {
                                                         .length -
                                                     1
                                         ? Colors.grey
-                                        : null,
+                                        : playerPro.themeMode == ThemeMode.light
+                                            ? AppColors.appBlack
+                                            : AppColors.appMainColor,
                               ),
                             ),
                     ),
@@ -125,5 +166,130 @@ class _PlayerViewState extends State<PlayerView> {
         ),
       );
     });
+  }
+}
+
+class CustomDrawerWidget extends StatelessWidget {
+  const CustomDrawerWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 100.w),
+      child: Scaffold(
+        appBar: AppBar(
+            title: const RefractedTextWidget(
+              text: 'Menu',
+            ),
+            automaticallyImplyLeading: false,
+            centerTitle: true),
+        body: Consumer<PlayerProvider>(builder: (context, playerPro, _) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 25.0),
+                    child: CustomMenuTileWidget(
+                      text: "Theme",
+                      onTap: () {
+                        playerPro.chnageThemeModel();
+                      },
+                      themeIcon: Icon(
+                        Icons.light_mode,
+                        size: 35.sp,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30.0),
+                    child: CustomMenuTileWidget(
+                      text: "Profile",
+                      onTap: () {
+                        AppNavigation.push(
+                            context: context,
+                            newRoute: AppNavigation.createCustomRoute(
+                                page: const ProfileView(),
+                                transitionType: TransitionType.slideRight));
+                      },
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 30.0,
+                    ),
+                    child: CustomMenuTileWidget(
+                      text: "Logout",
+                      onTap: () {
+                        // UtilWidgets.refractedOpenDialogBox(
+                        //   context: context,
+                        //   child: const RefractedLogoutDeleteDialogWidget(
+                        //       title: 'Are you sure want to logout ?',
+                        //       buttonTitle: 'Logout'),
+                        // );
+                      },
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 30.0, bottom: 20),
+                  //   child: CustomMenuTileWidget(
+                  //     text: "Delete Account",
+                  //     onTap: () {
+                  //       UtilWidgets.refractedOpenDialogBox(
+                  //         context: context,
+                  //         child: const RefractedLogoutDeleteDialogWidget(
+                  //             title: 'Are you sure want to delete account ?',
+                  //             buttonTitle: 'Delete'),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class CustomMenuTileWidget extends StatelessWidget {
+  const CustomMenuTileWidget({
+    Key? key,
+    required this.text,
+    this.onTap,
+    this.themeIcon,
+  }) : super(key: key);
+
+  final String text;
+  final Function()? onTap;
+  final Widget? themeIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          RefractedTextWidget(
+            text: text,
+            isSubText: true,
+          ),
+          themeIcon ??
+              Icon(
+                Icons.arrow_circle_right_outlined,
+                color: AppColors.appMainColor,
+                size: 35.sp,
+              ),
+        ],
+      ),
+    );
   }
 }

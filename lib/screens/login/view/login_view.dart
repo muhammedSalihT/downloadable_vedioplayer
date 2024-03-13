@@ -52,7 +52,6 @@ class LoginView extends StatelessWidget {
                       padding: EdgeInsets.only(top: 10.h),
                       child: RefractedTextFormFieldWidget(
                         controller: loginPro.numberCtr,
-                        hinttext: 'enter_number',
                         isShowHint: false,
                         keyboardtype: TextInputType.number,
                         contentPadding: EdgeInsets.zero,

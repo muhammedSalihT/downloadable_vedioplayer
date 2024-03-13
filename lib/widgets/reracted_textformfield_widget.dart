@@ -112,7 +112,7 @@ class RefractedTextFormFieldWidget extends StatelessWidget {
               style: TextStyle(
                   fontSize: fontSize?.sp ?? 18.sp,
                   fontWeight: FontWeight.w500,
-                  color: textColor ?? AppColors.appBlack),
+                  color: textColor),
               readOnly: readOnly!,
               enabled: enabled,
               focusNode: focusNode,
@@ -125,7 +125,7 @@ class RefractedTextFormFieldWidget extends StatelessWidget {
                   (isValidating!
                       ? (value) {
                           if (value == null || value.isEmpty) {
-                            return "${hinttext ?? headingText}";
+                            return "Enter ${hinttext ?? headingText}";
                           }
                           return null;
                         }
@@ -135,7 +135,7 @@ class RefractedTextFormFieldWidget extends StatelessWidget {
                 label: label,
 
                 isDense: isDense ?? true,
-                labelText: labelText,
+                labelText: hinttext,
                 // alignLabelWithHint: true,
                 suffixIcon: formFieldSuffixIcon,
                 prefixIcon: perfixIcon,
@@ -146,7 +146,7 @@ class RefractedTextFormFieldWidget extends StatelessWidget {
                 hintText: isShowHint ? hinttext : '',
                 hintStyle: hintStyle ??
                     TextStyle(
-                        fontSize: fontSize?.sp ?? 16.sp, color: hintColor),
+                        fontSize: fontSize?.sp ?? 18.sp, color: hintColor),
                 border: customBorder ??
                     OutlineInputBorder(
                       borderRadius: BorderRadius.circular(borderRadius ?? 15.r),

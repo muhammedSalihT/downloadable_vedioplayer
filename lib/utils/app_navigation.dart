@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class AppNavigation {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
+
+  static final GlobalKey<ScaffoldState> drawerKey = GlobalKey();
   static push({context, newRoute, materialRoutePage}) {
     Navigator.push(
       context,

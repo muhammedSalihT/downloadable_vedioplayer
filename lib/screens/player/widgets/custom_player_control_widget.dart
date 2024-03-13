@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:downloadeble_videoplayer/constents/app_colors.dart';
 import 'package:downloadeble_videoplayer/screens/player/view_model/player_viewmodel.dart';
+import 'package:downloadeble_videoplayer/utils/app_navigation.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_svg_widget.dart';
 import 'package:downloadeble_videoplayer/widgets/refracted_text_widget.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -59,37 +62,6 @@ class CustomPlayerControlWidget extends StatelessWidget {
             : playWidget;
     return Stack(
       children: <Widget>[
-        FlickAutoHideChild(
-            child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
-          decoration: const BoxDecoration(boxShadow: [
-            BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.1),
-                blurRadius: 10,
-                spreadRadius: 10)
-          ]),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const RefractedSvgWidgte(
-                    svgPath: 'assets/images/Group 1.svg',
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.r),
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpFuVdBXSr-dNzWMRUya1PocqgluQWwklH0JNStNwwR8J9UxMsje_heF0XqYBlgFuPaeA',
-                      height: 35.h,
-                      width: 35.h,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        )),
         FlickShowControlsAction(
           child: FlickSeekVideoAction(
             child: Center(
@@ -209,7 +181,7 @@ class CustomPlayerControlWidget extends StatelessWidget {
                               FlickCurrentPosition(
                                 fontSize: fontSize,
                               ),
-                              const RefractedTextWidget(
+                              RefractedTextWidget(
                                 text: '/',
                                 textColor: AppColors.appWhite,
                                 textSize: 12,
